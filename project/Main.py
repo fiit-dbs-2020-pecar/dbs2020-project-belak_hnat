@@ -17,11 +17,13 @@ def btn_showall():
         elif (dtbs == "donaska"):
             my_cursor.execute("SELECT * FROM donaska ORDER BY ID_donaska")
         elif (dtbs == "objednavka"):
-            my_cursor.execute("SELECT * FROM objednavka ORDER BY ID_donaska")
+            my_cursor.execute("SELECT * FROM objednavka ORDER BY ID_objednavka")
         elif (dtbs == "restauracia"):
-            my_cursor.execute("SELECT * FROM restauracia ORDER BY ID_donaska")
+            my_cursor.execute("SELECT * FROM restauracia ORDER BY ID_restauracia")
         elif (dtbs == "restauracia"):
             my_cursor.execute("SELECT * FROM dodavatel ORDER BY ID_dodavatel")
+        elif (dtbs == "zamestnanec"):
+            my_cursor.execute("SELECT * FROM zamestnanec ORDER BY ID_zamestnanec")
         rows = my_cursor.fetchall()
         for i in rows:
             tb.insert('', 'end', values=i)
@@ -56,11 +58,13 @@ def search(get_id,id,top):
         elif (dtbs == "donaska"):
             my_cursor.execute("select * from donaska where ID_donaska='" + get_id + "'")
         elif (dtbs == "objednavka"):
-            my_cursor.execute("select * from donaska where ID_donaska='" + get_id + "'")
+            my_cursor.execute("select * from objednavka where ID_objednavka='" + get_id + "'")
         elif (dtbs == "restauracia"):
             my_cursor.execute("select * from restauracia where ID_restauracia='" + get_id + "'")
         elif (dtbs == "dodavatel"):
-            my_cursor.execute("select * from restauracia where ID_dodavatel='" + get_id + "'")
+            my_cursor.execute("select * from dodavatel where ID_dodavatel='" + get_id + "'")
+        elif (dtbs == "zamestnanec"):
+            my_cursor.execute("select * from zamestnanec where ID_zamestnanec='" + get_id + "'")
         rows = my_cursor.fetchall()
         for i in rows:
             tb.insert('', 'end', values=i)
@@ -90,6 +94,8 @@ def btn_insert():
             m, n, o, p, r = "Adress:", "ID_customer", "Payment", "Price/$","Phone N."
         elif (dtbs == "objednavka"):
             m, n, o, p, r = "Food", "Weight", "Price/$", "ID_Delivery", "ID_Restaurant"
+        elif (dtbs == "zamestnanec"):
+            m, n, o, p, r = "Name", "Surname", "Email", "ID_Employment", "ID_Restaurant"
         label_price = Label(top, text=r)
         label_price.place(x=20, y=100)
         price = Entry(top)
@@ -131,11 +137,15 @@ def insertSIX(e1,e2,e3,e4,e5,e1txt,e2txt,e3txt,e4txt,e5txt,top):
         clearFieldSIX(e1, e2, e3, e4, e5)
     elif (e1txt.isnumeric() == True or e2txt.isnumeric() == False or e3txt.isnumeric() == False or e4txt.isnumeric() == False or e5txt.isnumeric() == False) and dtbs == "objednavka" :
         clearFieldSIX(e1, e2, e3, e4, e5)
+    elif (e1txt.isnumeric() == True or e2txt.isnumeric() == True or e3txt.isnumeric() == True or e4txt.isnumeric() == False or e5txt.isnumeric() == False) and dtbs == "restauracia" :
+        clearFieldSIX(e1, e2, e3, e4, e5)
     else:
         if dtbs == "donaska":
             sqlStuff = "INSERT INTO donaska (adresa,id_zakaznik,typ_platby,stav_obj,tel_cislo) VALUES (%s, %s, %s, %s, %s)"
         elif dtbs == "objednavka":
             sqlStuff = "INSERT INTO objednavka (jedlo,vaha,cena,id_donaska,id_restauracia) VALUES (%s, %s, %s, %s, %s)"
+        elif dtbs == "zamestnanec":
+            sqlStuff = "INSERT INTO zamestnanec (meno,priezvisko,email,id_zamesntanie,id_restauracia) VALUES (%s, %s, %s, %s, %s)"
         records = (e1txt, e2txt, e3txt, e4txt,e5txt)
         my_cursor.execute(sqlStuff, records)
         mydb.commit()
@@ -152,11 +162,11 @@ def clearFieldFIVE(e1,e2,e3,e4):
 def insertFIVE(e1,e2,e3,e4,e1txt,e2txt,e3txt,e4txt,top):
     if e1txt =="" or e2txt =="" or e3txt=="" or e4txt=="":
         MessageBox.showinfo("Insert status","Enter all required fields")
-    elif (e1txt.isnumeric() == True or e2txt.isnumeric() == True or e3txt.isnumeric() == True or e4txt.isnumeric() == True):
+    elif ((e1txt.isnumeric() == True or e2txt.isnumeric() == True or e3txt.isnumeric() == True or e4txt.isnumeric() == True) == "zakaznik"):
         clearFieldFIVE(e1, e2, e3, e4)
-    elif (e1txt.isnumeric() == True or e2txt.isnumeric() == True or e3txt.isnumeric() == True or e4txt.isnumeric() == False):
+    elif ((e1txt.isnumeric() == True or e2txt.isnumeric() == True or e3txt.isnumeric() == True or e4txt.isnumeric() == False) == "restauracia"):
         clearFieldFIVE(e1, e2, e3, e4)
-    elif (e1txt.isnumeric() == True or e2txt.isnumeric() == True or e3txt.isnumeric() == False or e4txt.isnumeric() == False):
+    elif ((e1txt.isnumeric() == True or e2txt.isnumeric() == True or e3txt.isnumeric() == False or e4txt.isnumeric() == False) == "dodavatel"):
         clearFieldFIVE(e1, e2, e3, e4)
     else:
         if dtbs == "zakaznik":
@@ -200,6 +210,8 @@ def delete(id,idtxt,top):
             my_cursor.execute("DELETE FROM  restauracua WHERE ID_restauracia='" + idtxt + "'")
         elif dtbs == "dodavatel":
             my_cursor.execute("DELETE FROM  dodavatel WHERE ID_dodavatel='" + idtxt + "'")
+        elif dtbs == "dodavatel":
+            my_cursor.execute("DELETE FROM  zamestnanec WHERE ID_zamestnanec='" + idtxt + "'")
         mydb.commit()
         top.destroy()
 
@@ -226,6 +238,8 @@ def btn_update_customer():
             m,n,o,p,r,s,t="Insert ID: ","Edit data of delivery","Adress","ID_Customer","Payment","Order status","Phone N."
         elif dtbs == "objednavka":
             m,n,o,p,r,s,t="Insert ID: ","Edit data of order","Food","Weight","Price","ID_Delivery","ID_Restaurant"
+        elif dtbs == "zamestnanec":
+            m,n,o,p,r,s,t="Insert ID: ","Edit data of employer","Name","Surname","Email","ID_Employment","ID_Restaurant"
         label_price = Label(top, text=t)
         label_price.place(x=20, y=160)
         price = Entry(top)
@@ -274,11 +288,15 @@ def update_customerSIX(e1,e2,e3,e4,e5,e6,e1txt,e2txt,e3txt,e4txt,e5txt,e6txt,top
         deleteSIX(e1,e2,e3,e4,e5,e6)
     elif (e1txt.isnumeric() == False or e2txt.isnumeric() == True or e3txt.isnumeric() == False or e4txt.isnumeric() == False or e5txt.isnumeric() == False or e6txt.isnumeric() == False) and dtbs == "objednavka":
         deleteSIX(e1, e2, e3, e4, e5, e6)
+    elif (e1txt.isnumeric() == False or e2txt.isnumeric() == True or e3txt.isnumeric() == True or e4txt.isnumeric() == True or e5txt.isnumeric() == False or e6txt.isnumeric() == False) and dtbs == "zamestnanec":
+        deleteSIX(e1, e2, e3, e4, e5, e6)
     else:
         if (dtbs == "donaska"):
             my_cursor.execute("UPDATE donaska SET adresa='"+e2txt+"', id_zakaznik='"+e3txt+"', typ_platby='"+e4txt+"',stav_obj='"+e5txt+"', tel_cislo='"+e6txt+"' WHERE ID_donaska='"+e1txt+"'")
         elif (dtbs == "objednavka"):
             my_cursor.execute("UPDATE objednavka SET jedlo='"+e2txt+"', vaha='"+e3txt+"', cena='"+e4txt+"',id_doanska='"+e5txt+"', id_restauracia='"+e6txt+"' WHERE ID_objednavka'"+e1txt+"'")
+        elif (dtbs == "objednavka"):
+            my_cursor.execute("UPDATE zamestnanec SET meno='"+e2txt+"', priezvisko='"+e3txt+"', email='"+e4txt+"',id_zamestnanie='"+e5txt+"', id_restauracia='"+e6txt+"' WHERE ID_objednavka'"+e1txt+"'")
         mydb.commit()
         top.destroy()
 
@@ -340,9 +358,9 @@ def choose_database(x):
         m, n, o, p, r, s = "ID","Name", "Food", "Price", "ID_Restaurant","----"
         my_cursor.execute("SELECT * FROM dodavatel")
     elif x == 6:
-        dtbs = "dodavatel"
-        m, n, o, p, r, s = "ID","Name", "Food", "Price", "ID_Restaurant","----"
-        my_cursor.execute("SELECT * FROM dodavatel")
+        dtbs = "zamestnanec"
+        m, n, o, p, r, s = "ID","Name", "Surname", "Email", "ID_Employment","ID_Restaurant"
+        my_cursor.execute("SELECT * FROM  zamestnec")
 
 
     tb.delete(*tb.get_children())
