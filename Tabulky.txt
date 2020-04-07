@@ -1,0 +1,69 @@
+CREATE TABLE dbs.zakaznik ( 
+ID_zakaznik INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+meno VARCHAR(30) NOT NULL, 
+priezvisko VARCHAR(30) NOT NULL, 
+email VARCHAR(30) NOT NULL, 
+premium VARCHAR(30) NOT NULL
+)
+
+CREATE TABLE dbs.donaska ( 
+ID_donaska INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+adresa VARCHAR(30) NOT NULL, 
+id_zakaznik INT UNSIGNED NOT NULL,
+FOREIGN KEY (id_zakaznik) REFERENCES zakaznik(ID_zakaznik) ON UPDATE CASCADE ON DELETE RESTRICT,
+typ_platby VARCHAR(30) NOT NULL, 
+stav_obj BOOLEAN, 
+tel_cislo INT NOT NULL
+);
+
+
+create table dbs.objednavka(
+ID_objednavka int UNSIGNED auto_increment primary key,
+jedlo VARCHAR(30) NOT NULL, 
+vaha INT NOT NULL,
+cena int not null,
+id_donaska INT UNSIGNED NOT NULL,
+FOREIGN KEY (id_donaska) REFERENCES donaska(ID_donaska) ON UPDATE CASCADE ON DELETE RESTRICT,
+id_restauracia INT UNSIGNED NOT NULL,
+FOREIGN KEY (id_restauracia) REFERENCES restauracia(ID_restauracia) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+create table dbs.restauracia(
+ID_restauracia int UNSIGNED auto_increment primary key,
+manazer varchar(50) not	null,
+nazov varchar(50) not null,
+adresa varchar(50) not null,
+mesiac_zisk INT 
+);
+
+create table dbs.dodavatel(
+ID_dodavatel int UNSIGNED auto_increment primary key,
+nazov varchar(50) not null,
+typ_jedla varchar(50) not null,
+cena int not null,
+id_restauracia INT UNSIGNED NOT NULL,
+FOREIGN KEY (id_restauracia) REFERENCES restauracia(ID_restauracia) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+
+
+CREATE TABLE dbs.zamestnanec(
+ID_zamestananec INT UNSIGNED auto_increment primary key,
+meno varchar(30) not null,
+priezvisko varchar(30) not null,
+email varchar(30) not null,
+id_zamestanie INT UNSIGNED NOT NULL,
+FOREIGN KEY (id_zamestanie) REFERENCES zamestnanie(ID_zamestnanie) ON UPDATE CASCADE ON DELETE RESTRICT,
+id_restauracia INT UNSIGNED NOT NULL,
+FOREIGN KEY (id_restauracia) REFERENCES restauracia(ID_restauracia) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TABLE dbs.zamestnanie(
+ID_zamestnanie INT UNSIGNED auto_increment primary key,
+mzda_h varchar(30) not null,
+typ_prace varchar(30) not null,
+full_part_time varchar(30) not null,
+min_odpracovat_h int not null
+);
+
+
