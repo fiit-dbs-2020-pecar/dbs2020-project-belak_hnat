@@ -88,7 +88,7 @@ def btn_insert():
         btn.place(x=20, y=110)
 
     # 6 itemov
-    elif (dtbs == "donaska" or dtbs == "objednavka"):
+    elif (dtbs == "donaska" or dtbs == "objednavka"or dtbs == "zamestnanec"):
         top.geometry("400x170")
         if (dtbs == "donaska"):
             m, n, o, p, r = "Adress:", "ID_customer", "Payment", "Price/$","Phone N."
@@ -145,7 +145,7 @@ def insertSIX(e1,e2,e3,e4,e5,e1txt,e2txt,e3txt,e4txt,e5txt,top):
         elif dtbs == "objednavka":
             sqlStuff = "INSERT INTO objednavka (jedlo,vaha,cena,id_donaska,id_restauracia) VALUES (%s, %s, %s, %s, %s)"
         elif dtbs == "zamestnanec":
-            sqlStuff = "INSERT INTO zamestnanec (meno,priezvisko,email,id_zamesntanie,id_restauracia) VALUES (%s, %s, %s, %s, %s)"
+            sqlStuff = "INSERT INTO zamestnanec (meno,priezvisko,email,id_zamestnanie,id_restauracia) VALUES (%s, %s, %s, %s, %s)"
         records = (e1txt, e2txt, e3txt, e4txt,e5txt)
         my_cursor.execute(sqlStuff, records)
         mydb.commit()
@@ -232,7 +232,7 @@ def btn_update_customer():
                                                                                             name.get(),surname.get(), email.get(), premium.get(), top))
         btn.place(x=20, y=170)
     #6 item
-    elif (dtbs == "donaska" or dtbs == "objednavka"):
+    elif (dtbs == "donaska" or dtbs == "objednavka" or dtbs == "zamestnanec"):
         top.geometry("400x230")
         if dtbs == "donaska":
             m,n,o,p,r,s,t="Insert ID: ","Edit data of delivery","Adress","ID_Customer","Payment","Order status","Phone N."
@@ -329,10 +329,29 @@ def update_customerFIVE(e1,e2,e3,e4,e5,e1txt,e2txt,e3txt,e4txt,e5txt,top):
         top.destroy()
 
 def adv_settings():
-    tb.delete(*tb.get_children())
-    my_cursor.execute("select * from dbs.donaska join dbs.zakaznik  where zakaznik.ID_zakaznik=donaska.id_zakaznik")
+    if dtbs == "restauracia":
+        tb.delete(*tb.get_children())
+        m, n, o, p, r, s = "Restaurant", "Manazer", "Orders", "Sum_price", "----", "----"
+        t, u, v, x, y, z = 125, 120, 100, 100, 100, 100
+
+        # concat(meno, ' ', priezvisko)
+        my_cursor.execute("select restauracia.nazov,restauracia.manazer, count(objednavka.id_restauracia), sum(objednavka.cena) from dbs.restauracia JOIN dbs.objednavka where restauracia.id_restauracia=objednavka.id_restauracia group by restauracia.nazov having count(objednavka.id_restauracia) >1 order by objednavka.cena desc")
     rows = my_cursor.fetchall()
-    print(rows)
+    for i in rows:
+        tb.insert('', 'end', values=i)
+    tb.heading(0, text=m)
+    tb.heading(1, text=n)
+    tb.heading(2, text=o)
+    tb.heading(3, text=p)
+    tb.heading(4, text=r)
+    tb.heading(5, text=s)
+    tb.column(0, width=t, minwidth=0, anchor="c")
+    tb.column(1, width=u, minwidth=0, anchor="c")
+    tb.column(2, width=v, minwidth=0, anchor="c")
+    tb.column(3, width=x, minwidth=0, anchor="c")
+    tb.column(4, width=y, minwidth=0, anchor="c")
+    tb.column(5, width=z, minwidth=0, anchor="c")
+
 
 
 def choose_database(x):
@@ -351,7 +370,7 @@ def choose_database(x):
         my_cursor.execute("SELECT * FROM objednavka")
     elif x == 4:
         dtbs = "restauracia"
-        m, n, o, p, r, s = "ID","Manazer", "Name", "Adress", "Income/M","----"
+        m, n, o, p, r, s = "ID","Manazer", "Restaurant", "Adress", "Income/M","----"
         my_cursor.execute("SELECT * FROM restauracia")
     elif x == 5:
         dtbs = "dodavatel"
@@ -360,9 +379,7 @@ def choose_database(x):
     elif x == 6:
         dtbs = "zamestnanec"
         m, n, o, p, r, s = "ID","Name", "Surname", "Email", "ID_Employment","ID_Restaurant"
-        my_cursor.execute("SELECT * FROM  zamestnec")
-
-
+        my_cursor.execute("SELECT * FROM  zamestnanec")
     tb.delete(*tb.get_children())
     rows = my_cursor.fetchall()
     for i in rows:
@@ -390,6 +407,7 @@ def choose_database(x):
 # mydb.commit()
 
 root = Tk()
+root.resizable(0, 0)
 root.title("Customers")
 root.geometry("772x520+400+200")
 menubar = Menu(root)

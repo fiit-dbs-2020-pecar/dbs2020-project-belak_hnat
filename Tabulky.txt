@@ -48,11 +48,11 @@ FOREIGN KEY (id_restauracia) REFERENCES restauracia(ID_restauracia) ON UPDATE CA
 
 
 CREATE TABLE dbs.zamestnanec(
-ID_zamestananec INT UNSIGNED auto_increment primary key,
+ID_zamestnanec INT UNSIGNED auto_increment primary key,
 meno varchar(30) not null,
 priezvisko varchar(30) not null,
 email varchar(30) not null,
-id_zamestanie INT UNSIGNED NOT NULL,
+id_zamestnanie INT UNSIGNED NOT NULL,
 FOREIGN KEY (id_zamestanie) REFERENCES zamestnanie(ID_zamestnanie) ON UPDATE CASCADE ON DELETE RESTRICT,
 id_restauracia INT UNSIGNED NOT NULL,
 FOREIGN KEY (id_restauracia) REFERENCES restauracia(ID_restauracia) ON UPDATE CASCADE ON DELETE RESTRICT
@@ -62,8 +62,8 @@ CREATE TABLE dbs.zamestnanie(
 ID_zamestnanie INT UNSIGNED auto_increment primary key,
 mzda_h varchar(30) not null,
 typ_prace varchar(30) not null,
-full_part_time varchar(30) not null,
-min_odpracovat_h int not null
+full_part_time varchar(30) not null
 );
 
+SELECT restauracia.nazov,mzda_h,zamestnanec.meno,typ_prace from dbs.zamestnanec JOIN dbs.zamestnanie ON zamestnanie.id_zamestnanie=zamestnanec.id_zamestnanie JOIN dbs.restauracia ON restauracia.ID_restauracia = zamestnanec.id_restauracia 
 
