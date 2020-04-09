@@ -53,14 +53,15 @@ meno varchar(30) not null,
 priezvisko varchar(30) not null,
 email varchar(30) not null,
 id_zamestnanie INT UNSIGNED NOT NULL,
-FOREIGN KEY (id_zamestanie) REFERENCES zamestnanie(ID_zamestnanie) ON UPDATE CASCADE ON DELETE RESTRICT,
+FOREIGN KEY (id_zamestnanie) REFERENCES zamestnanie(ID_zamestnanie) ON UPDATE CASCADE ON DELETE RESTRICT,
 id_restauracia INT UNSIGNED NOT NULL,
 FOREIGN KEY (id_restauracia) REFERENCES restauracia(ID_restauracia) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
+
 CREATE TABLE dbs.zamestnanie(
 ID_zamestnanie INT UNSIGNED auto_increment primary key,
-mzda_h varchar(30) not null,
+mzda_h int(30) not null,
 typ_prace varchar(30) not null,
 full_part_time varchar(30) not null
 );
