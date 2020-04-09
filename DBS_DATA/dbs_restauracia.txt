@@ -1,0 +1,14 @@
+INSERT INTO restauracia VALUES (1,'Uma Randall','Pellentesque torquent','18377 East United Arab Emirates Ct.',17289);
+INSERT INTO restauracia VALUES (2,'Brandon Lee','Elit consequat','97705 West Qatar Ave.',13436);
+INSERT INTO restauracia VALUES (3,'Reece Mckenzie','Vulputate nibh','57378 North Sweden Ave.',11751);
+INSERT INTO restauracia VALUES (4,'Bruce Reese','Libero sem','69709  Paraguay Ave.',9053);
+INSERT INTO restauracia VALUES (5,'Vaughan Matthews','Suspendisse euismod','21850  Sudan St.',19157);
+INSERT INTO restauracia VALUES (6,'Curran Payne','Nunc egestas','150 North Nigeria Blvd.',7570);
+INSERT INTO restauracia VALUES (7,'Echo Colon','Et fringilla','87568 South Saint Lucia Ln.',13481);
+INSERT INTO restauracia VALUES (8,'Kuame Knox','Convallis sapien','46390 East Burundi Ave.',16436);
+INSERT INTO restauracia VALUES (9,'Malachi Sykes','Eget suscipit','26404 West Davenport St.',21102);
+INSERT INTO restauracia VALUES (10,'Victor Sykes','Egestas habitant','66262 East Austria Blvd.',8834);
+INSERT INTO restauracia VALUES (11,'Cole Bradley','Conubia diam','59154 North Macedonia Ave.',7188);
+INSERT INTO restauracia VALUES (12,'Dawn Peters','Sapien pulvinar','59327 East British Indian Ocean Territory Ln.',15205);
+INSERT INTO restauracia VALUES (13,'Mariko Trujillo','A mauris','43914 North Burundi Ct.',13601);
+INSERT INTO restauracia VALUES (14,'Hall Ware','Leo pretium','18459  Haiti Blvd.',22179);

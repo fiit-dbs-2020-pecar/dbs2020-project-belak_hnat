@@ -11,7 +11,7 @@ ID_donaska INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 adresa VARCHAR(30) NOT NULL, 
 id_zakaznik INT UNSIGNED NOT NULL,
 FOREIGN KEY (id_zakaznik) REFERENCES zakaznik(ID_zakaznik) ON UPDATE CASCADE ON DELETE RESTRICT,
-typ_platby VARCHAR(30) NOT NULL, 
+typ_platby boolean, 
 stav_obj BOOLEAN, 
 tel_cislo INT NOT NULL
 );
@@ -66,5 +66,5 @@ typ_prace varchar(30) not null,
 full_part_time varchar(30) not null
 );
 
-SELECT restauracia.nazov,mzda_h,zamestnanec.meno,typ_prace from dbs.zamestnanec JOIN dbs.zamestnanie ON zamestnanie.id_zamestnanie=zamestnanec.id_zamestnanie JOIN dbs.restauracia ON restauracia.ID_restauracia = zamestnanec.id_restauracia 
+SELECT restauracia.nazov,restauracia.manazer,avg(mzda_h),count(zamestnanec.meno) from dbs.zamestnanec JOIN dbs.zamestnanie ON zamestnanie.id_zamestnanie=zamestnanec.id_zamestnanie JOIN dbs.restauracia WHERE restauracia.ID_restauracia = zamestnanec.id_restauracia group by restauracia.nazov order by zamestnanec.meno desc;
 

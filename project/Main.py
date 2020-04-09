@@ -12,7 +12,7 @@ my_cursor = mydb.cursor()
 def btn_showall():
         tb.delete(*tb.get_children())
         if (dtbs == "zakaznik"):
-            my_cursor.execute("SELECT * FROM zakaznik ORDER BY ID_zakaznik")
+            my_cursor.execute("SELECT * FROM zakaznik ORDER BY ID_zakaznik LIMIT 1000")
             # my_cursor.execute("SELECT * FROM zakaznik LIMIT 3")
         elif (dtbs == "donaska"):
             my_cursor.execute("SELECT * FROM donaska ORDER BY ID_donaska")
@@ -91,7 +91,7 @@ def btn_insert():
     elif (dtbs == "donaska" or dtbs == "objednavka"or dtbs == "zamestnanec"):
         top.geometry("400x170")
         if (dtbs == "donaska"):
-            m, n, o, p, r = "Adress:", "ID_customer", "Payment", "Price/$","Phone N."
+            m, n, o, p, r = "Adress:", "ID_customer", "Payment-1/0", "Stav-0/1","Phone N."
         elif (dtbs == "objednavka"):
             m, n, o, p, r = "Food", "Weight", "Price/$", "ID_Delivery", "ID_Restaurant"
         elif (dtbs == "zamestnanec"):
@@ -133,7 +133,7 @@ def clearFieldSIX(e1,e2,e3,e4,e5):
 def insertSIX(e1,e2,e3,e4,e5,e1txt,e2txt,e3txt,e4txt,e5txt,top):
     if e1txt == "" or e2txt == "" or e3txt == "" or e4txt == "" or e5txt=="":
         MessageBox.showinfo("Insert status", "Enter all required fields")
-    elif (e1txt.isnumeric() == True or e2txt.isnumeric() == False or e3txt.isnumeric() == True or e4txt.isnumeric() == False or e5txt.isnumeric() == False) and dtbs == "donaska" :
+    elif (e1txt.isnumeric() == True or e2txt.isnumeric() == False or e3txt.isnumeric() == False or e4txt.isnumeric() == False or e5txt.isnumeric() == False) and dtbs == "donaska" :
         clearFieldSIX(e1, e2, e3, e4, e5)
     elif (e1txt.isnumeric() == True or e2txt.isnumeric() == False or e3txt.isnumeric() == False or e4txt.isnumeric() == False or e5txt.isnumeric() == False) and dtbs == "objednavka" :
         clearFieldSIX(e1, e2, e3, e4, e5)
@@ -333,9 +333,19 @@ def adv_settings():
         tb.delete(*tb.get_children())
         m, n, o, p, r, s = "Restaurant", "Manazer", "Orders", "Sum_price", "----", "----"
         t, u, v, x, y, z = 125, 120, 100, 100, 100, 100
-
+        tb.column(0, width=t, minwidth=0, anchor="c")
+        tb.column(1, width=u, minwidth=0, anchor="c")
+        tb.column(2, width=v, minwidth=0, anchor="c")
+        tb.column(3, width=x, minwidth=0, anchor="c")
+        tb.column(4, width=y, minwidth=0, anchor="c")
+        tb.column(5, width=z, minwidth=0, anchor="c")
         # concat(meno, ' ', priezvisko)
         my_cursor.execute("select restauracia.nazov,restauracia.manazer, count(objednavka.id_restauracia), sum(objednavka.cena) from dbs.restauracia JOIN dbs.objednavka where restauracia.id_restauracia=objednavka.id_restauracia group by restauracia.nazov having count(objednavka.id_restauracia) >1 order by objednavka.cena desc")
+    if dtbs == "zamestnanec":
+        m, n, o, p, r, s = "Restaurant", "Manazer", "Priem_mzda", "Customre", "----", "----"
+        tb.column(0, width=125, minwidth=0, anchor="c")
+        tb.delete(*tb.get_children())
+        my_cursor.execute("SELECT restauracia.nazov,restauracia.manazer,avg(mzda_h),count(zamestnanec.meno) from dbs.zamestnanec JOIN dbs.zamestnanie ON zamestnanie.id_zamestnanie=zamestnanec.id_zamestnanie JOIN dbs.restauracia WHERE restauracia.ID_restauracia = zamestnanec.id_restauracia group by restauracia.nazov order by zamestnanec.meno desc")
     rows = my_cursor.fetchall()
     for i in rows:
         tb.insert('', 'end', values=i)
@@ -345,12 +355,10 @@ def adv_settings():
     tb.heading(3, text=p)
     tb.heading(4, text=r)
     tb.heading(5, text=s)
-    tb.column(0, width=t, minwidth=0, anchor="c")
-    tb.column(1, width=u, minwidth=0, anchor="c")
-    tb.column(2, width=v, minwidth=0, anchor="c")
-    tb.column(3, width=x, minwidth=0, anchor="c")
-    tb.column(4, width=y, minwidth=0, anchor="c")
-    tb.column(5, width=z, minwidth=0, anchor="c")
+
+
+
+
 
 
 
@@ -359,7 +367,14 @@ def choose_database(x):
     if x == 1:
         dtbs = "zakaznik"
         m,n,o,p,r,s = "ID","Name:","Surname:","Email:","Premium:","----"
-        my_cursor.execute("SELECT * FROM zakaznik")
+        t, u, v, l, y, z = 70, 110, 110, 140, 100, 0
+        my_cursor.execute("SELECT * FROM zakaznik LIMIT 10, 100")
+        tb.column(0, width=t, minwidth=0, anchor="c")
+        tb.column(1, width=u, minwidth=0, anchor="c")
+        tb.column(2, width=v, minwidth=0, anchor="c")
+        tb.column(3, width=l, minwidth=0, anchor="c")
+        tb.column(4, width=y, minwidth=0, anchor="c")
+        tb.column(5, width=z, minwidth=0, anchor="c")
     elif x == 2:
         dtbs = "donaska"
         m, n, o, p, r, s = "ID","Adress:", "ID_customer", "Payment", "Order status","Phone N."
@@ -390,6 +405,14 @@ def choose_database(x):
     tb.heading(3, text=p)
     tb.heading(4, text=r)
     tb.heading(5, text=s)
+    tb.column(0, width=70, minwidth=0, anchor="c")
+    tb.column(1, width=100, minwidth=0, anchor="c")
+    tb.column(2, width=100, minwidth=0, anchor="c")
+    tb.column(3, width=100, minwidth=0, anchor="c")
+    tb.column(4, width=70, minwidth=0, anchor="c")
+    tb.column(5, width=100, minwidth=0, anchor="c")
+
+
 
 
 
