@@ -32,39 +32,61 @@ def btn_showall():
 def get():
     top=Toplevel()
     top.attributes('-topmost', 'true') #okno bude vzdy v predu
-    top.geometry("400x100")
+    top.geometry("400x100+500+300")
+    if (dtbs == 'zakaznik'):
+        options = ["ID","Name","Surname",]
+        global clicked
+        clicked = StringVar()
+        clicked.set(options[0])
+        drop = OptionMenu(top, clicked, *options,command=selected)
+        drop.place(x=100,y=15)
+
+
     top.title ("Search")
-    label_name=Label(top,text="Enter items's ID")
+    label_name=Label(top,text="Search item by ")
     label_name.place(x=20,y=20)
     id=Entry(top)
-    id.place(x=150,y=20)
+    id.place(x=200,y=20)
     btn=Button(top,text="Search",height = 1, width = 12,command=lambda: search(id.get(),id,top))
-    btn.place(x=20,y=40)
+    btn.place(x=215,y=47)
+
+def selected(event):
+    global click
+    click = clicked.get()
 
 
 
+def searchDel(id):
+    MessageBox.showinfo("Insert status", "Invalid character")
+    id.delete(0, END)
 
+def search(get,id,top):
 
-def search(get_id,id,top):
-    if (get_id==""):
+    if (get==""):
         MessageBox.showinfo("Insert status","Enter all required fields")
-    elif (get_id.isnumeric() == False):
-        MessageBox.showinfo("Insert status", "Invalid character")
-        id.delete(0,END)
+    elif (get.isnumeric() == False and click  == "ID"):
+        searchDel(id)
+    elif (get.isnumeric() == True and (click == "Name" or click == "Surname")):
+        searchDel(id)
     else:
         tb.delete(*tb.get_children())
         if (dtbs == "zakaznik"):
-            my_cursor.execute("select * from zakaznik where ID_zakaznik='"+get_id+"'")
+                if click == "ID":
+                    my_cursor.execute("select * from zakaznik where ID_zakaznik='"+get+"'")
+                elif click == "Name":
+                    my_cursor.execute("select * from zakaznik where meno='" + get + "'")
+                elif click == "Surname":
+                    my_cursor.execute("select * from zakaznik where priezvisko='" + get + "'")
         elif (dtbs == "donaska"):
-            my_cursor.execute("select * from donaska where ID_donaska='" + get_id + "'")
+            my_cursor.execute("select * from donaska where ID_donaska='" + get + "'")
         elif (dtbs == "objednavka"):
-            my_cursor.execute("select * from objednavka where ID_objednavka='" + get_id + "'")
+            my_cursor.execute("select * from objednavka where ID_objednavka='" + get + "'")
         elif (dtbs == "restauracia"):
-            my_cursor.execute("select * from restauracia where ID_restauracia='" + get_id + "'")
+            my_cursor.execute("select * from restauracia where ID_restauracia='" + get + "'")
         elif (dtbs == "dodavatel"):
-            my_cursor.execute("select * from dodavatel where ID_dodavatel='" + get_id + "'")
+            my_cursor.execute("select * from dodavatel where ID_dodavatel='" + get + "'")
         elif (dtbs == "zamestnanec"):
-            my_cursor.execute("select * from zamestnanec where ID_zamestnanec='" + get_id + "'")
+            my_cursor.execute("select * from zamestnanec where ID_zamestnanec='" + get + "'")
         rows = my_cursor.fetchall()
         for i in rows:
             tb.insert('', 'end', values=i)
@@ -346,6 +368,10 @@ def adv_settings():
         tb.column(0, width=125, minwidth=0, anchor="c")
         tb.delete(*tb.get_children())
         my_cursor.execute("SELECT restauracia.nazov,restauracia.manazer,avg(mzda_h),count(zamestnanec.meno) from dbs.zamestnanec JOIN dbs.zamestnanie ON zamestnanie.id_zamestnanie=zamestnanec.id_zamestnanie JOIN dbs.restauracia WHERE restauracia.ID_restauracia = zamestnanec.id_restauracia group by restauracia.nazov order by zamestnanec.meno desc")
+
+    if dtbs == "zamestnanec":
+        return
+        
     rows = my_cursor.fetchall()
     for i in rows:
         tb.insert('', 'end', values=i)
@@ -389,8 +415,15 @@ def choose_database(x):
         my_cursor.execute("SELECT * FROM restauracia")
     elif x == 5:
         dtbs = "dodavatel"
+        t, u, v, l, y, z = 70, 140, 140, 80, 100, 0
         m, n, o, p, r, s = "ID","Name", "Food", "Price", "ID_Restaurant","----"
         my_cursor.execute("SELECT * FROM dodavatel")
+        tb.column(0, width=t, minwidth=0, anchor="c")
+        tb.column(1, width=u, minwidth=0, anchor="c")
+        tb.column(2, width=v, minwidth=0, anchor="c")
+        tb.column(3, width=l, minwidth=0, anchor="c")
+        tb.column(4, width=y, minwidth=0, anchor="c")
+        tb.column(5, width=z, minwidth=0, anchor="c")
     elif x == 6:
         dtbs = "zamestnanec"
         m, n, o, p, r, s = "ID","Name", "Surname", "Email", "ID_Employment","ID_Restaurant"
@@ -405,12 +438,7 @@ def choose_database(x):
     tb.heading(3, text=p)
     tb.heading(4, text=r)
     tb.heading(5, text=s)
-    tb.column(0, width=70, minwidth=0, anchor="c")
-    tb.column(1, width=100, minwidth=0, anchor="c")
-    tb.column(2, width=100, minwidth=0, anchor="c")
-    tb.column(3, width=100, minwidth=0, anchor="c")
-    tb.column(4, width=70, minwidth=0, anchor="c")
-    tb.column(5, width=100, minwidth=0, anchor="c")
+
 
 
 
@@ -460,6 +488,12 @@ tb.column(2, width=100, minwidth=0,anchor="c")
 tb.column(3, width=100, minwidth=0,anchor="c")
 tb.column(4, width=70, minwidth=0,anchor="c")
 tb.column(5, width=100, minwidth=0,anchor="c")
+tb.column(0, width=70, minwidth=0, anchor="c")
+tb.column(1, width=100, minwidth=0, anchor="c")
+tb.column(2, width=100, minwidth=0, anchor="c")
+tb.column(3, width=100, minwidth=0, anchor="c")
+tb.column(4, width=70, minwidth=0, anchor="c")
+tb.column(5, width=100, minwidth=0, anchor="c")
 choose_database(1)
 tb.pack(fill=BOTH, expand=0, side='right')
 

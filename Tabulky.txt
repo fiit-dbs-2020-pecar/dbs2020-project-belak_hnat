@@ -68,3 +68,4 @@ full_part_time varchar(30) not null
 
 SELECT restauracia.nazov,restauracia.manazer,avg(mzda_h),count(zamestnanec.meno) from dbs.zamestnanec JOIN dbs.zamestnanie ON zamestnanie.id_zamestnanie=zamestnanec.id_zamestnanie JOIN dbs.restauracia WHERE restauracia.ID_restauracia = zamestnanec.id_restauracia group by restauracia.nazov order by zamestnanec.meno desc;
 
+select mzda_h, typ_prace, zamestnanec.meno, zamestnanec.priezvisko from zamestnanec JOIN zamestnanie where zamestnanec.id_zamestnanie=zamestnanie.ID_zamestnanie  and typ_prace = 'Auxiliary power' and mzda_h = (select max(mzda_h) from zamestnanie where typ_prace = 'Auxiliary power')
